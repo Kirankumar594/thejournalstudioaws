@@ -5,7 +5,11 @@ import cors from 'cors';
 import BannerRouter from "./Routes/BannerRoute.js"
 import TestimonialRouter from "./Routes/TestimonialRoute.js"
 import ProductRouter from "./Routes/ProductRoute.js"
+import path from 'path';
+import ReviewRouter from "./Routes/ReviewRoute.js"
+
 // import ProductDetailRouter from "./Routes/ProductDetailRoutes.js";
+
 
 dotenv.config();
 connectDB();
@@ -13,10 +17,12 @@ connectDB();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use('/api/banner',BannerRouter)
 app.use('/api/Testimonial',TestimonialRouter)
 app.use("/api/Product", ProductRouter)
+app.use("/api/Review", ReviewRouter)
 // app.use("/api/ProductDetail", ProductDetailRouter)
 
 // example route
