@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 
+import mongoose from "mongoose"; 
 const TestimonialSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -11,6 +11,12 @@ const TestimonialSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
+  },
 }, { timestamps: true });
 
-export default mongoose.model("Testimonial", TestimonialSchema);
+export default mongoose.model("Testimonial", TestimonialSchema);  
