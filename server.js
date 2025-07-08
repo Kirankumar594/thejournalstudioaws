@@ -8,6 +8,7 @@ import ProductRouter from "./Routes/ProductRoute.js"
 import path from 'path';
 import ReviewRouter from "./Routes/ReviewRoute.js"
 import UserRouter from "./Routes/UserRoutes.js";
+import featureRoutes from './Routes/featureRoutes.js';
 
 // import ProductDetailRouter from "./Routes/ProductDetailRoutes.js";
 
@@ -25,7 +26,7 @@ app.use('/api/Testimonial',TestimonialRouter)
 app.use("/api/Product", ProductRouter)
 app.use("/api/Review", ReviewRouter)
 app.use("/api/User", UserRouter)
-// app.use("/api/ProductDetail", ProductDetailRouter)
+app.use('/api/feature', featureRoutes);
 
 // example route
 app.get('/', (req, res) => {
