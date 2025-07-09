@@ -22,9 +22,14 @@
 
 
 
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+
+// Storage engine using persistent Render disk
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const folder = '/mnt/data/uploads/banners';
+    const folder = '/mnt/data/uploads/banners'; // Use persistent volume
     if (!fs.existsSync(folder)) {
       fs.mkdirSync(folder, { recursive: true });
     }
@@ -35,3 +40,6 @@ const storage = multer.diskStorage({
     cb(null, `banner-${uniqueSuffix}${path.extname(file.originalname)}`);
   },
 });
+
+const uploadBanner = multer({ storage }).single('image');
+export default uploadBanner;
