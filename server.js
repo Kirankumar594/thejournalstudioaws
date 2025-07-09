@@ -24,7 +24,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use('/api/banner',BannerRouter)
 app.use('/api/Testimonial',TestimonialRouter)
 app.use("/api/Product", ProductRouter)
-app.use("/api/Review", ReviewRouter)
+// app.use("/api/Review", ReviewRouter)
 app.use("/api/User", UserRouter)
 app.use('/api/feature', featureRoutes);
 
