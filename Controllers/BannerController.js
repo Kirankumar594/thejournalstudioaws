@@ -14,7 +14,7 @@ export const createBanner = async (req, res) => {
       return res.status(400).json({ error: "Image is required" });
     }
 
-    const imagePath = req.file.path.replace(/\\/g, '/');
+ const imagePath = req.file.path.replace(/\\/g, '/');
 
     const banner = new Banner({
       title,
