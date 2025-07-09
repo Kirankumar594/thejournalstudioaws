@@ -4,6 +4,7 @@ import fs from "fs";
 export const createBanner = async (req, res) => {
   try {
     const { title, description } = req.body;
+    console.log('req.body', req.body);
 
     if (!title || !description) {
       return res.status(400).json({ error: "Title and description are required" });
@@ -20,7 +21,7 @@ export const createBanner = async (req, res) => {
       description,
       image: imagePath,
     });
-
+console.log('banner', banner);
     await banner.save();
 
     res.status(201).json({ success: true, data: banner });
