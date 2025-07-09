@@ -6,7 +6,7 @@ import BannerRouter from "./Routes/BannerRoute.js"
 import TestimonialRouter from "./Routes/TestimonialRoute.js"
 import ProductRouter from "./Routes/ProductRoute.js"
 import path from 'path';
-import ReviewRouter from "./Routes/ReviewRoute.js"
+// import ReviewRouter from "./Routes/ReviewRoute.js"
 import UserRouter from "./Routes/UserRoutes.js";
 import featureRoutes from './Routes/featureRoutes.js';
 
