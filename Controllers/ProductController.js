@@ -54,47 +54,50 @@ export const getProduct = async (req, res) => {
   }
 };
 
+// Your update product controller
+
 export const updateProduct = async (req, res) => {
   try {
-    const { name, price, description1, description2 } = req.body;
-    
-    // Parse description2 if it's a string
-    const desc2 = typeof description2 === 'string' ? JSON.parse(description2) : description2;
-    
-    let updateData = { 
-      name, 
-      price, 
-      description1, 
-      description2: {
-        size: desc2.size,
-        wt: desc2.wt,
-        page: desc2.page,
-        Format: desc2.Format
-      }
-    };
+    const productId = req.params.id;
+    const { name, price, description1, description2, feature, oldImages } = req.body;
 
-    if (req.files && req.files.length > 0) {
-      const imagePaths = req.files.map(file => file.path.replace(/\\/g, '/'));
-      const oldProduct = await Product.findById(req.params.id);
-      if (oldProduct && oldProduct.images) {
-        oldProduct.images.forEach(img => fs.existsSync(img) && fs.unlinkSync(img));
+    // Parse JSON strings if sent as JSON strings
+    const parsedDescription2 = JSON.parse(description2);
+    const parsedFeature = JSON.parse(feature);
+
+    // oldImages may come as a string or array
+    // If a single oldImages, multer/formData sends it as a string
+    let oldImagesArray = [];
+    if (oldImages) {
+      if (Array.isArray(oldImages)) {
+        oldImagesArray = oldImages;
+      } else {
+        oldImagesArray = [oldImages];
       }
-      updateData.images = imagePaths;
     }
 
-    const product = await Product.findByIdAndUpdate(
-      req.params.id, 
-      updateData, 
-      { new: true, runValidators: true }
-    );
-    
-    if (!product) return res.status(404).json({ success: false, error: "Product not found" });
-    res.status(200).json({ success: true, data: product });
+    // New uploaded files
+    const newImagePaths = req.files ? req.files.map(file => file.path) : [];
+
+    // Combine old images and new image paths
+    const combinedImages = [...oldImagesArray, ...newImagePaths];
+
+    // Update product with combined images
+    const updatedProduct = await Product.findByIdAndUpdate(productId, {
+      name,
+      price,
+      description1,
+      description2: parsedDescription2,
+      feature: parsedFeature,
+      images: combinedImages
+    }, { new: true });
+
+    res.json({ success: true, data: updatedProduct });
   } catch (error) {
-    if (req.files) req.files.forEach(file => fs.existsSync(file.path) && fs.unlinkSync(file.path));
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 export const deleteProduct = async (req, res) => {
   try {

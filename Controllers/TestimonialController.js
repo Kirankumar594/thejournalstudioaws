@@ -87,6 +87,7 @@ export const deleteTestimonial = async (req, res) => {
   }
 };
 
+
 // @desc    Update a testimonial
 // @route   PUT /api/testimonials/:id
 // @access  Public
