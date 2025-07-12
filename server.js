@@ -10,6 +10,7 @@ import ReviewRouter from "./Routes/ReviewRoute.js"
 import UserRouter from "./Routes/UserRoutes.js";
 import featureRoutes from './Routes/featureRoutes.js';
 import orderRouter from './Routes/OrderRoute.js';
+import VideoRouter from './Routes/VideoRoute.js';
 
 // import ProductDetailRouter from "./Routes/ProductDetailRoutes.js";
 
@@ -21,6 +22,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(process.cwd(), "Uploads")))
+app.use("/uploads/videos", express.static(path.join(process.cwd(), "Uploads/videos")));
+
 // app.use('/uploads', express.static('uploads'));
 
 
@@ -31,6 +34,7 @@ app.use("/api/Review", ReviewRouter)
 app.use("/api/User", UserRouter)
 app.use('/api/feature', featureRoutes);
 app.use("/api", orderRouter);
+app.use("/api/videos", VideoRouter);
 
 // example route
 app.get('/', (req, res) => {

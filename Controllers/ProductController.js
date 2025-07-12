@@ -3,21 +3,20 @@ import fs from 'fs';
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description1, description2 } = req.body;
-    
+    const { name, price, description1, description2, author } = req.body;
+
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: "At least one product image is required" });
     }
 
-    // Parse description2 if it's a string
     const desc2 = typeof description2 === 'string' ? JSON.parse(description2) : description2;
-    
     const imagePaths = req.files.map(file => file.path.replace(/\\/g, '/'));
-    
+
     const product = new Product({
       images: imagePaths,
       name,
       price,
+      author,
       description1,
       description2: {
         size: desc2.size,
@@ -54,38 +53,26 @@ export const getProduct = async (req, res) => {
   }
 };
 
-// Your update product controller
-
 export const updateProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-    const { name, price, description1, description2, feature, oldImages } = req.body;
+    const { name, price, author, description1, description2, feature, oldImages } = req.body;
 
-    // Parse JSON strings if sent as JSON strings
-    const parsedDescription2 = JSON.parse(description2);
-    const parsedFeature = JSON.parse(feature);
+    const parsedDescription2 = typeof description2 === 'string' ? JSON.parse(description2) : description2;
+    const parsedFeature = typeof feature === 'string' ? JSON.parse(feature) : feature;
 
-    // oldImages may come as a string or array
-    // If a single oldImages, multer/formData sends it as a string
     let oldImagesArray = [];
     if (oldImages) {
-      if (Array.isArray(oldImages)) {
-        oldImagesArray = oldImages;
-      } else {
-        oldImagesArray = [oldImages];
-      }
+      oldImagesArray = Array.isArray(oldImages) ? oldImages : [oldImages];
     }
 
-    // New uploaded files
-    const newImagePaths = req.files ? req.files.map(file => file.path) : [];
-
-    // Combine old images and new image paths
+    const newImagePaths = req.files ? req.files.map(file => file.path.replace(/\\/g, '/')) : [];
     const combinedImages = [...oldImagesArray, ...newImagePaths];
 
-    // Update product with combined images
     const updatedProduct = await Product.findByIdAndUpdate(productId, {
       name,
       price,
+      author,
       description1,
       description2: parsedDescription2,
       feature: parsedFeature,
@@ -98,12 +85,12 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-
 export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ success: false, error: "Product not found" });
-    if (product.images) product.images.forEach(img => fs.existsSync(img) && fs.unlinkSync(img));
+
+    product.images.forEach(img => fs.existsSync(img) && fs.unlinkSync(img));
     res.status(200).json({ success: true, data: {} });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
