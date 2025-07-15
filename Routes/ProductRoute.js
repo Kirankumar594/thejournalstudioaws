@@ -20,10 +20,13 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-router.post("/", upload.array("images", 5), createProduct);
+// router.post("/", upload.array("images", 10), createProduct);
 router.get("/", getProducts);
 router.get("/:id", getProduct);
-router.put("/:id", upload.array("images", 5), updateProduct);
+// router.put("/:id", upload.array("images", 10), updateProduct);
 router.delete("/:id", deleteProduct);
+// Change from 5 to 10
+router.post("/", upload.array("images", 10), createProduct);
+router.put("/:id", upload.array("images", 10), updateProduct);
 
 export default router;

@@ -10,25 +10,25 @@ export const createBanner = async (req, res) => {
       return res.status(400).json({ error: "Title and description are required" });
     }
 
-    if (!req.file) {
-      return res.status(400).json({ error: "Image is required" });
-    }
+    // if (!req.file) {
+    //   return res.status(400).json({ error: "Image is required" });
+    // }
 
- const imagePath = req.file.path.replace(/\\/g, '/');
+//  const imagePath = req.file.path.replace(/\\/g, '/');
 
     const banner = new Banner({
       title,
       description,
-      image: imagePath,
+      // image: imagePath,
     });
 console.log('banner', banner);
     await banner.save();
 
     res.status(201).json({ success: true, data: banner });
   } catch (error) {
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
+    // if (req.file && fs.existsSync(req.file.path)) {
+    //   fs.unlinkSync(req.file.path);
+    // }
     res.status(500).json({ success: false, error: error.message });
   }
 };
@@ -51,9 +51,9 @@ export const deleteBanner = async (req, res) => {
     if (!banner) {
       return res.status(404).json({ error: "Banner not found" });
     }
-    if (banner.image && fs.existsSync(banner.image)) {
-      fs.unlinkSync(banner.image);
-    }
+    // if (banner.image && fs.existsSync(banner.image)) {
+    //   fs.unlinkSync(banner.image);
+    // }
     res.status(200).json({
       success: true,
       message: "Banner deleted successfully",
@@ -72,12 +72,12 @@ export const updateBanner = async (req, res) => {
       return res.status(404).json({ error: "Banner not found" });
     }
 
-    if (req.file) {
-      if (banner.image && fs.existsSync(banner.image)) {
-        fs.unlinkSync(banner.image);
-      }
-      banner.image = req.file.path.replace(/\\/g, '/');
-    }
+    // if (req.file) {
+    //   if (banner.image && fs.existsSync(banner.image)) {
+    //     fs.unlinkSync(banner.image);
+    //   }
+    //   banner.image = req.file.path.replace(/\\/g, '/');
+    // }
 
     if (title) banner.title = title;
     if (description) banner.description = description;

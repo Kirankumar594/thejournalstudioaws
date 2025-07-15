@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const BannerSchema = new mongoose.Schema({
-  image: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+  // image: {
+  //   type: String,
+  //   required: true,
+  //   trim: true,
+  // },
   title: {
     type: String,
     required: true,
