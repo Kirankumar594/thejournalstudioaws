@@ -1,4 +1,4 @@
-import Feature from '../models/Feature.js';
+import Feature from '../Models/Feature.js';
 
 // Create Feature
 export const createFeature = async (req, res) => {
