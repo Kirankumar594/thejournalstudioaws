@@ -1,8 +1,8 @@
+// middlewares/uploadBanner.js
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-// Storage engine
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const folder = 'uploads/banners';
@@ -12,13 +12,14 @@ const storage = multer.diskStorage({
     cb(null, folder);
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now();
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, `banner-${uniqueSuffix}${path.extname(file.originalname)}`);
   },
 });
 
-const uploadBanner = multer({ storage }).single('image');
+const uploadBanner = multer({ storage }).array('images', 10); // accepts up to 10 files
 export default uploadBanner;
+
 
 
 

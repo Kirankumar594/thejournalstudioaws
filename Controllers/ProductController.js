@@ -10,7 +10,8 @@ export const createProduct = async (req, res) => {
     }
 
     const desc2 = typeof description2 === 'string' ? JSON.parse(description2) : description2;
-    const imagePaths = req.files.map(file => file.path.replace(/\\/g, '/'));
+    const imagePaths = req.files.map(file => `/uploads/banners/${file.filename}`);
+
 
     const product = new Product({
       images: imagePaths,
@@ -66,7 +67,7 @@ export const updateProduct = async (req, res) => {
       oldImagesArray = Array.isArray(oldImages) ? oldImages : [oldImages];
     }
 
-    const newImagePaths = req.files ? req.files.map(file => file.path.replace(/\\/g, '/')) : [];
+    const newImagePaths = req.files.map(file => `/uploads/banners/${file.filename}`);
     const combinedImages = [...oldImagesArray, ...newImagePaths];
 
     const updatedProduct = await Product.findByIdAndUpdate(productId, {

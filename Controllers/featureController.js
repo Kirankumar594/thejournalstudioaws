@@ -1,17 +1,15 @@
-// controllers/featureController.js
 import Feature from '../Models/Feature.js';
 
 // Create Feature
 export const createFeature = async (req, res) => {
     try {
         const { heading, description } = req.body;
-        let imagePath = null;
 
-        if (req.file) {
-            imagePath = req.file.path.replace(/\\/g, '/'); // Normalize path for Windows if needed
-        } else {
+        if (!req.file) {
             return res.status(400).json({ success: false, message: 'Image is required' });
         }
+
+        const imagePath = `/uploads/features/${req.file.filename}`; // ✅ safer path for frontend use
 
         const newFeature = new Feature({
             heading,
@@ -26,17 +24,15 @@ export const createFeature = async (req, res) => {
     }
 };
 
+// Update Feature
 export const updateFeature = async (req, res) => {
     try {
         const { heading, description } = req.body;
 
-        const updateData = {
-            heading,
-            description,
-        };
+        const updateData = { heading, description };
 
         if (req.file) {
-            updateData.image = req.file.path.replace(/\\/g, '/');
+            updateData.image = `/uploads/features/${req.file.filename}`;
         }
 
         const updated = await Feature.findByIdAndUpdate(req.params.id, updateData, { new: true });
@@ -46,7 +42,7 @@ export const updateFeature = async (req, res) => {
     }
 };
 
-// Get Single (or Latest) Feature
+// Get Latest Feature
 export const getFeature = async (req, res) => {
     try {
         const feature = await Feature.findOne().sort({ createdAt: -1 });
