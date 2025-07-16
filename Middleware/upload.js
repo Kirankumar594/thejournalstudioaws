@@ -5,7 +5,7 @@ import fs from 'fs';
 // Storage engine
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const folder = 'uploads';
+    const folder = 'uploads/banners';
     if (!fs.existsSync(folder)) {
       fs.mkdirSync(folder, { recursive: true });
     }
