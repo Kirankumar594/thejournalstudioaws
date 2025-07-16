@@ -7,7 +7,7 @@ export const createFeature = async (req, res) => {
         let imagePath = null;
 
         if (req.file) {
-            imagePath = '/uploads/' + req.file.filename;
+            imagePath = 'uploads/' + req.file.filename;
         } else {
             return res.status(400).json({ success: false, message: 'Image is required' });
         }
@@ -35,7 +35,7 @@ export const updateFeature = async (req, res) => {
         };
 
         if (req.file) {
-            updateData.image = '/uploads/' + req.file.filename;
+            updateData.image = 'uploads/' + req.file.filename;
         }
 
         const updated = await Feature.findByIdAndUpdate(req.params.id, updateData, { new: true });
