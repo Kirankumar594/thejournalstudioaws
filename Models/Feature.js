@@ -1,4 +1,3 @@
-// models/Feature.js
 import mongoose from 'mongoose';
 
 const FeatureSchema = new mongoose.Schema({
@@ -14,7 +13,7 @@ const FeatureSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true, // image URL or path
+    required: true,
   }
 }, { timestamps: true });
 

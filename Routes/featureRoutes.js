@@ -6,16 +6,16 @@ import {
   getFeature,
   updateFeature,
   deleteFeature,
-} from '../Controllers/featureController.js';
+} from '../controllers/featureController.js';
 
 const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Make sure this folder exists
+    cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // unique filename with extension
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
