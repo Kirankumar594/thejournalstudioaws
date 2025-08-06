@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const uploadBanner = multer({ storage }).array('images', 10); // accepts up to 10 files
+const uploadBanner = multer({ storage }).array('images', 10);
 export default uploadBanner;
 
 
