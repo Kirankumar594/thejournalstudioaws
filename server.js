@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import connectDB from './config/dB.js';
+import connectDB from './config/dB.js'; 
 import cors from 'cors';
 import BannerRouter from "./Routes/BannerRoute.js"
 import TestimonialRouter from "./Routes/TestimonialRoute.js"
@@ -41,12 +41,17 @@ app.use("/api/videos", VideoRouter);
 //   res.send('API is running...');
 // });
 
-app.use(express.static(path.join(__dirname, 'build'))); // Change 'build' to your frontend folder if needed
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-// Redirect all requests to the index.html file
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
+app.use(express.static(path.join(__dirname, 'build')));
+
+// React frontend route handling
 app.get("*", (req, res) => {
-  return  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 
