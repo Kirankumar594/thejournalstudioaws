@@ -24,9 +24,16 @@ const config = {
   
   // Frontend URLs
   frontend: {
-    baseUrl: process.env.NODE_ENV === 'production' 
-      ? 'https://thejournalstudio.in' 
-      : 'http://localhost:3000',
+    baseUrl: (() => {
+      const env = process.env.NODE_ENV;
+      console.log("NODE_ENV in config:", env);
+      // Default to production if NODE_ENV is undefined (common in production deployments)
+      if (env === 'production' || !env) {
+        return 'https://thejournalstudio.in';
+      } else {
+        return 'http://localhost:3000';
+      }
+    })(),
     paymentSuccess: '/Paymentsuccess',
     checkout: '/CheckOut'
   },
@@ -39,5 +46,11 @@ const config = {
     defaultPaymentStatus: 'completed'
   }
 };
+
+// Validate config structure
+console.log("Config validation:");
+console.log("- Frontend object exists:", !!config.frontend);
+console.log("- Frontend baseUrl exists:", !!config.frontend?.baseUrl);
+console.log("- Frontend baseUrl value:", config.frontend?.baseUrl);
 
 export default config;

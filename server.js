@@ -17,6 +17,9 @@ import PhonepeRoutes from "./Routes/PhonepeRoutes.js"
 
 
 dotenv.config();
+console.log("Environment variables loaded:");
+console.log("- NODE_ENV:", process.env.NODE_ENV);
+console.log("- PORT:", process.env.PORT);
 connectDB();
 
 const app = express();
@@ -57,7 +60,7 @@ app.get("*", (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

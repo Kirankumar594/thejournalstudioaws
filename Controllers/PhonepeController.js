@@ -10,6 +10,11 @@ import transactionModel from "../Models/PhonepeModel.js";
 import Order from "../Models/OrderModel.js";
 import config from "../config/appConfig.js"; 
 
+// Debug config import
+console.log("Config imported successfully:", !!config);
+console.log("Config keys:", Object.keys(config || {}));
+console.log("NODE_ENV:", process.env.NODE_ENV); 
+
 import {
   StandardCheckoutClient,
   Env,
@@ -78,9 +83,22 @@ class Transaction {
 
       const merchantOrderId = data._id.toString(); // Use DB _id as unique order ID
 
+      // Debug config object
+      console.log("Config object:", config);
+      console.log("Config.frontend:", config.frontend);
+      
+      if (!config.frontend || !config.frontend.baseUrl) {
+        console.error("Frontend config is missing or incomplete:", config.frontend);
+        return res.status(500).json({ 
+          error: "Configuration error",
+          details: "Frontend baseUrl is not configured properly"
+        });
+      }
+
       const redirectUrl = `${config.frontend.baseUrl}${config.frontend.paymentSuccess}?transactionId=${data._id}&userID=${userId}`;
 
       console.log("Building payment request for merchantOrderId:", merchantOrderId);
+      console.log("Redirect URL:", redirectUrl);
 
       // Check if PhonePe client is initialized
       if (!client) {
@@ -122,6 +140,18 @@ class Transaction {
       // Fallback to direct API approach
       console.log("Using direct PhonePe API as fallback...");
       
+      // Additional safety check for config.frontend.baseUrl
+      if (!config.frontend || !config.frontend.baseUrl) {
+        console.error("Frontend config is missing in fallback approach:", config.frontend);
+        return res.status(500).json({ 
+          error: "Configuration error",
+          details: "Frontend baseUrl is not configured properly in fallback"
+        });
+      }
+      
+      const callbackUrl = `${config.frontend.baseUrl.replace('3000', '5001')}/api/phonepe/checkPayment/${merchantOrderId}/${userId}`;
+      console.log("Callback URL:", callbackUrl);
+      
       const paymentPayload = {
         merchantId: MERCHANT_ID,
         merchantTransactionId: merchantOrderId,
@@ -129,7 +159,7 @@ class Transaction {
         amount: amount * 100, // Convert to paise
         redirectUrl: redirectUrl,
         redirectMode: "POST",
-        callbackUrl: `${config.frontend.baseUrl.replace('3000', '5001')}/api/phonepe/checkPayment/${merchantOrderId}/${userId}`,
+        callbackUrl: callbackUrl,
         mobileNumber: Mobile,
         paymentInstrument: {
           type: "PAY_PAGE",
