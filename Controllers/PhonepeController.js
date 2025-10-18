@@ -7,7 +7,8 @@ const PHONEPE_API_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay";
 const CALLBACK_URL = "hhttps://thejournalstudio.in";  
 
 import transactionModel from "../Models/PhonepeModel.js";
-import Order from "../Models/OrderModel.js"; 
+import Order from "../Models/OrderModel.js";
+import config from "../config/appConfig.js"; 
 
 import {
   StandardCheckoutClient,
@@ -77,7 +78,7 @@ class Transaction {
 
       const merchantOrderId = data._id.toString(); // Use DB _id as unique order ID
 
-      const redirectUrl = `https://thejournalstudio.in/Paymentsuccess?transactionId=${data._id}&userID=${userId}`;
+      const redirectUrl = `${config.frontend.baseUrl}${config.frontend.paymentSuccess}?transactionId=${data._id}&userID=${userId}`;
 
       console.log("Building payment request for merchantOrderId:", merchantOrderId);
 
@@ -128,7 +129,7 @@ class Transaction {
         amount: amount * 100, // Convert to paise
         redirectUrl: redirectUrl,
         redirectMode: "POST",
-        callbackUrl: `https://thejournalstudio.in/api/user/checkPayment/${merchantOrderId}/${userId}`,
+        callbackUrl: `${config.frontend.baseUrl.replace('3000', '5001')}/api/phonepe/checkPayment/${merchantOrderId}/${userId}`,
         mobileNumber: Mobile,
         paymentInstrument: {
           type: "PAY_PAGE",

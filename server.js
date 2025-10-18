@@ -10,8 +10,8 @@ import ReviewRouter from "./Routes/ReviewRoute.js"
 import UserRouter from "./Routes/UserRoutes.js"; 
 import featureRoutes from './Routes/featureRoutes.js'; 
 import orderRouter from './Routes/OrderRoute.js'; 
-import VideoRouter from './Routes/VideoRoute.js';  
-import PhonepeRoutes from "./Routes/PhonepeRoutes.js" 
+import VideoRouter from './Routes/VideoRoute.js'; 
+import PhonepeRoutes from "./Routes/PhonepeRoutes.js"
 
 // import ProductDetailRouter from "./Routes/ProductDetailRoutes.js";
 
