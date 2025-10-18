@@ -6,11 +6,12 @@ import BannerRouter from "./Routes/BannerRoute.js"
 import TestimonialRouter from "./Routes/TestimonialRoute.js"
 import ProductRouter from "./Routes/ProductRoute.js"
 import path from 'path';
-import ReviewRouter from "./Routes/ReviewRoute.js"
-import UserRouter from "./Routes/UserRoutes.js";
-import featureRoutes from './Routes/featureRoutes.js';
-import orderRouter from './Routes/OrderRoute.js';
-import VideoRouter from './Routes/VideoRoute.js';
+import ReviewRouter from "./Routes/ReviewRoute.js" 
+import UserRouter from "./Routes/UserRoutes.js"; 
+import featureRoutes from './Routes/featureRoutes.js'; 
+import orderRouter from './Routes/OrderRoute.js'; 
+import VideoRouter from './Routes/VideoRoute.js';  
+import PhonepeRoutes from "./Routes/PhonepeRoutes.js" 
 
 // import ProductDetailRouter from "./Routes/ProductDetailRoutes.js";
 
@@ -34,7 +35,8 @@ app.use("/api/Review", ReviewRouter)
 app.use("/api/User", UserRouter)
 app.use('/api/feature', featureRoutes);
 app.use("/api", orderRouter);
-app.use("/api/videos", VideoRouter);
+app.use("/api/videos", VideoRouter); 
+app.use("/api/phonepe", PhonepeRoutes);
 
 // example route
 // app.get('/', (req, res) => {
