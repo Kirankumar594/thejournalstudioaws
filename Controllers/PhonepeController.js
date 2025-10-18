@@ -6,7 +6,8 @@ const SECRET_KEY = "37e1984b-2ab0-43ed-b939-2ae4cc88a2af";
 const PHONEPE_API_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay"; 
 const CALLBACK_URL = "hhttps://thejournalstudio.in";  
 
-import transactionModel from "../Models/PhonepeModel.js"; 
+import transactionModel from "../Models/PhonepeModel.js";
+import Order from "../Models/OrderModel.js"; 
 
 import {
   StandardCheckoutClient,
@@ -308,9 +309,54 @@ class Transaction {
         if (state === "COMPLETED") {
           // Clear cart on successful payment
           console.log("Payment completed successfully");
-          if (data.config && typeof data.config === 'object') {
-            // Clear the config after successful payment
-            data.config = null;
+          
+          // Create order record if config exists and order hasn't been created yet
+          if (data.config && typeof data.config === 'object' && data.config.items) {
+            try {
+              console.log("Creating order from payment data...");
+              
+              const orderData = {
+                customer: data.config.customer || {
+                  fullName: data.username,
+                  email: data.userId,
+                  phone: data.Mobile.toString(),
+                  address: data.config.shipping?.address || '',
+                  city: data.config.shipping?.city || '',
+                  state: data.config.shipping?.state || '',
+                  postalCode: data.config.shipping?.postalCode || '',
+                  country: data.config.shipping?.country || 'India'
+                },
+                items: data.config.items.map(item => ({
+                  productId: item.productId,
+                  title: item.title,
+                  quantity: item.quantity,
+                  price: item.price,
+                  personalization: item.personalization,
+                  paperType: item.paperType,
+                  color: item.color,
+                  image: item.image
+                })),
+                paymentMethod: 'upi',
+                subtotal: data.config.subtotal || data.amount,
+                shippingFee: data.config.shippingFee || 0,
+                totalAmount: data.config.totalAmount || data.amount,
+                paymentStatus: 'completed',
+                shipmentStatus: 'pending',
+                orderDate: data.config.orderDate ? new Date(data.config.orderDate) : new Date()
+              };
+
+              const newOrder = new Order(orderData);
+              await newOrder.save();
+              
+              console.log("Order created successfully:", newOrder._id);
+              
+              // Clear the config after successful order creation
+              data.config = null;
+              
+            } catch (orderError) {
+              console.error("Error creating order:", orderError);
+              // Don't fail the payment verification if order creation fails
+            }
           }
         }
         
